@@ -1,4 +1,4 @@
-<!-- Edit User from Local Storage -->
+<!-- Post User Details from Crud -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +12,7 @@
         <input type="tel" name="mobile" required/>
         <button>Submit</button>
     </form>
-    <ul id="listOfItems"></ul>
+    <ul id="listOfUsers"></ul>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     <script>
         function saveToLocalStorage(event) {
@@ -51,7 +51,7 @@
         })
 
         function showUserOnScreen(obj) {
-            const parentElement = document.getElementById("listOfItems");
+            const parentElement = document.getElementById("listOfUsers");
             const childElement = document.createElement("li");
             childElement.textContent = obj.name + " - " + obj.email + " - " + obj.mobile;
             parentElement.append(childElement);
