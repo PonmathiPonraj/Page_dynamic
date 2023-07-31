@@ -20,6 +20,10 @@ const preMovie = async() => {
 
     let butter = await addButter;
     console.log(`husband: i got some ${butter} on popcorn`);
+    console.log('wife: Super Dear it will be delicious');
+
+    let drinks = await getColdDrinks;
+    console.log(`husband: i got some ${drinks} for you`);
     console.log('husband: anything else darling?');
     console.log('wife: lets got we are getting late');
     console.log('husband: thank you for the reminder *grins*');
