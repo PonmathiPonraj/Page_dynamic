@@ -38,6 +38,18 @@
                 // showUserOnScreen(obj);
         }
 
+        window.addEventListener("DOMContentLoaded", () => {
+            const localStorageObj = localStorage;
+            const localStorageKeys = Obeject.keys(localStorageObj);
+
+            for (var i = 0; i < localStorageKeys.length; i++) {
+                const key = localStorageKeys[i];
+                const userDetailsString = localStorageObj[key];
+                const userDetailsObj = JSON.parse(userDetailsString);
+                showNewUserOnScreen(userDetailsObj);
+            }
+        })
+
         function showUserOnScreen(obj) {
             const parentElement = document.getElementById("listOfItems");
             const childElement = document.createElement("li");
