@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <form onsubmit="addProduct(event)">
+        <label>Item Name</label>
+        <input type="name" id="itemname" required>
+        <label for="table">Choose Description</label>
+        <label>Description</label>
+        <input type="text" id="description" required/>
+        <label>Price</label>
+        <input type="number" id="price" required>
+        <label>Quantity</label>
+        <input type="number" id="quantity" required>
+        <button type="submit">Add Item</button>
+    </form>
+    <ul id="listOfItems"></ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    <script>
+        function addProduct(event) {
+            event.preventDefault();
+            item = document.getElementById("itemname").value;
+            description = document.getElementById("description").value;
+            price = document.getElementById("price").value;
+            quantity = document.getElementById("quantity").value;
+            const obj = {
+                item,
+                description,
+                price,
+                quantity
+            };
+
+            axios.post(`https://crudcrud.com/api/5ce5794cdc814a3fbfdc44833d5fbc37/productDetails`, obj)
+                .then((response) => {
+                    showOnScreen(response.data);
+                    console.log(response);
+                })
+
+            .catch((err) => {
+                document.body.innerHTML = document.body.innerHTML + "<h4>Something Went WRONG</h4>";
+                console.log(err);
+            })
+        }
+
+        function getUser(userid) {
+            axios.get(`https://crudcrud.com/api/5ce5794cdc814a3fbfdc44833d5fbc37/productDetails/${userid}`)
+                .then((response) => {
+                    showOnScreen(response.data);
+                })
+                .catch((err) => {
+                    document.body.innerHTML = document.body.innerHTML + "<h4>Something Went WRONG</h4>";
+                    console.log(err);
+                })
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            axios.get('https://crudcrud.com/api/5ce5794cdc814a3fbfdc44833d5fbc37/productDetails')
+                .then((response) => {
+                    console.log(response.data);
+
+                    for (let i = 0; i < response.data.length; i++) {
+                        showOnScreen(response.data[i])
+                    }
+                })
+                .catch((err) => {
+                    document.body.innerHTML = document.body.innerHTML + "<h4>Something Went WRONG</h4>";
+                    console.log(err);
+                })
+
+        })
+
+        function showOnScreen(user) {
+            const parentNode = document.getElementById('listOfItems');
+
+            const childNode = `<li id=${user._id}>${user.item}-${user.description}-${user.price}-${user.quantity}
+                        <button onclick=buyOne('${user._id}','${user.item}','${user.description}','${user.price}','${user.quantity}')>Buy One</button>
+                        <button onclick=buyTwo('${user._id}','${user.item}','${user.description}','${user.price}','${user.quantity}')>Buy Two</button>
+                         <button onclick=buyThree('${user._id}','${user.item}','${user.description}','${user.price}','${user.quantity}')>Buy Three</button>`
+
+            parentNode.innerHTML = parentNode.innerHTML + childNode;
+        }
+
+        function buyOne(userid, item, description, price, quantity) {
+            let quan = quantity - 1
+            if (quan > 0) {
+
+                axios.put(`https://crudcrud.com/api/5ce5794cdc814a3fbfdc44833d5fbc37/productDetails/${userid}`, {
+                        "item": item,
+                        "description": description,
+                        "price": price,
+                        "quantity": quan
+                    }).then(() => {
+                        getUser(userid);
+                        removeUser(userid);
+
+                    })
+                    .catch((err) => {
+                        document.body.innerHTML = document.body.innerHTML + "<h4>Something Went Wrong</h4>"
+                        console.log(err)
+                    })
+            } else {
+                deleteUser(userid);
+            }
+        }
+
+        function buyTwo(userid, item, description, price, quantity) {
+            let quan = quantity - 2
+            if (quan > 0) {
+
+                axios.put(`https://crudcrud.com/api/5ce5794cdc814a3fbfdc44833d5fbc37/productDetails/${userid}`, {
+                        "item": item,
+                        "description": description,
+                        "price": price,
+                        "quantity": quan
+                    }).then(() => {
+                        getUser(userid);
+                        removeUser(userid);
+
+                    })
+                    .catch((err) => {
+                        document.body.innerHTML = document.body.innerHTML + "<h4>Something Went Wrong</h4>"
+                        console.log(err)
+                    })
+            } else {
+                deleteUser(userid);
+            }
+        }
+
+        function buyThree(userid, item, description, price, quantity) {
+            let quan = quantity - 3;
+            if (quan > 0) {
+
+                axios.put(`https://crudcrud.com/api/5ce5794cdc814a3fbfdc44833d5fbc37/productDetails/${userid}`, {
+                        "item": item,
+                        "description": description,
+                        "price": price,
+                        "quantity": quan
+                    }).then(() => {
+                        getUser(userid);
+                        removeUser(userid);
+
+                    })
+                    .catch((err) => {
+                        document.body.innerHTML = document.body.innerHTML + "<h4>Something Went Wrong</h4>"
+                        console.log(err)
+                    })
+
+            } else {
+                deleteUser(userid);
+            }
+        }
+
+        function deleteUser(userid) {
+            axios.delete(`https://crudcrud.com/api/5ce5794cdc814a3fbfdc44833d5fbc37/productDetails/${userid}`)
+                .then((response) => {
+                    removeUser(userid)
+                })
+                .catch((err) => {
+                    document.body.innerHTML = document.body.innerHTML + "Something Went WRONG";
+                    console.log(err);
+                })
+        }
+
+        function removeUser(userid) {
+            let parent = document.getElementById("listOfItems")
+            let deleteChild = document.getElementById(userid);
+            parent.removeChild(deleteChild);
+        }
+    </script>
+
+</body>
+
+</html>
